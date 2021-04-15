@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('homepage');
-})->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('about', function () {
     return view('about');
@@ -28,3 +26,5 @@ Route::get('services', function () {
 Route::get('contact', function () {
     return view('contact');
 })->name('contact');
+
+Route::resource('categories', 'CategoryController');
