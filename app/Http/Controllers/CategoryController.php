@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -18,10 +19,10 @@ class CategoryController extends Controller
         return view('category.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
         Category::create([
-            'name' => $request->name
+            'name' => ucwords($request->name)
             ]);
 
         return redirect()->route('categories.index');
@@ -33,19 +34,18 @@ class CategoryController extends Controller
         return view('category.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreCategoryRequest $request, $id)
     {
         $category = Category::findOrFail($id);
         $category->update([
-            'name' => $request->name
+            'name' => ucwords($request->name)
         ]);
 
         return redirect()->route('categories.index');
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
 
         return redirect()->route('categories.index');

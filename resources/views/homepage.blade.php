@@ -4,13 +4,15 @@
 <div class="col-lg-3">
 
     <h1 class="my-4">Urua</h1>
-    <div class="list-group">
-        @forelse ($categories as $category)
-            <a href="#" class="list-group-item">{{ $category->name }}</a>
-        @empty
-            <a class="list-group-item">No Category Listed.</a>
-        @endforelse
-    </div>
+    <a href="{{ route('categories.index') }}">
+        <div class="list-group">
+            @forelse ($categories as $category)
+                <span href="#" class="list-group-item">{{ $category->name }}</span>
+            @empty
+                <span class="list-group-item">No Category Listed.</span>
+            @endforelse
+        </div>
+    </a>
 
   </div>
   <!-- /.col-lg-3 -->
