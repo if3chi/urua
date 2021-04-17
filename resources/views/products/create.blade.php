@@ -20,7 +20,9 @@
             </div>
             <div class="form-group">
                 <label for="description" class="form-label">Description:</label>
-                <input type="textarea" class="form-control border-info @error('description') border-danger @enderror" placeholder="Product Description" name="description" value="{{ old('description') }}">
+                <textarea type="text" class="form-control border-info @error('description') border-danger @enderror" placeholder="Product Description" name="description" >
+                    {{ old('description')  }}
+                </textarea>
             </div>
             <div class="form-group">
                 <label for="category" class="form-label">Category:</label>

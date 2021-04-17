@@ -55,12 +55,12 @@
                 <h4 class="card-title">
                   <a href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a>
                 </h4>
-                <h5>{{ $product->price }}</h5>
+                <h5>${{ $product->price }}</h5>
                 <p class="card-text">{{ $product->description }}</p>
               </div>
-              <div class="card-footer">
-                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                <p class="card-text">
+              <div class="card-footer clear-fix">
+                <small class="text-muted float-left">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                <p class="card-text float-right">
                     {{ $product->category->name }}
                 </p>
               </div>
