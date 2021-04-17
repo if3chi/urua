@@ -34,6 +34,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div>
+            {{ $categories->links() }}
+        </div>
     </div>
     <br>
     <!-- /.row -->

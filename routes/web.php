@@ -28,3 +28,4 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::resource('categories', 'CategoryController');
+Route::resource('products', 'ProductController');
