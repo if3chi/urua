@@ -7,8 +7,6 @@ use App\Http\Requests\StoreProductRequest;
 use App\Product;
 use Carbon\Carbon;
 use File;
-use Illuminate\Http\Request;
-use Storage;
 
 class ProductController extends Controller
 {
@@ -30,31 +28,15 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        $image = $request->image;
-        $imagePath = $this->defaultProductImage;
-        $productName = $request->name;
 
-        if($image){
-            $date = Carbon::now()->format('d-m-Y');
-            $imageName = str_replace(' ', '', $productName).'_'.$date;
-            $extension = '.'.$image->extension();
-            $imagePath = 'storage/'.$image->storeAs('products', $imageName.$extension, 'public');
-        }
-
-        Product::create([
-            'name' => $productName,
-            'image' => $imagePath,
-            'price' => $request->price,
-            'description' => $request->description,
-            'category_id' => $request->category
-        ]);
+        Product::create($this->getProcessedData($request, 'store'));
 
         return redirect()->route('products.index');
     }
 
     public function show(Product $product)
     {
-        //
+        # TODO: implement
     }
 
     public function edit(Product $product)
@@ -66,29 +48,7 @@ class ProductController extends Controller
 
     public function update(StoreProductRequest $request, Product $product)
     {
-        $image = $request->image;
-        $imagePath = $product->image;
-        $productName = $request->name;
-
-        if($image){
-            if($imagePath != $this->defaultProductImage && File::exists($imagePath) )
-            {
-                $deleted = File::delete($imagePath);
-            }
-
-            $date = Carbon::now()->format('d-m-Y');
-            $imageName = str_replace(' ', '', $productName).'_'.$date;
-            $extension = '.'.$image->extension();
-            $imagePath = 'storage/'.$image->storeAs('products', $imageName.$extension, 'public');
-        }
-
-        $product->update([
-            'name' => $productName,
-            'image' => $imagePath,
-            'price' => $request->price,
-            'description' => $request->description,
-            'category_id' => $request->category
-        ]);
+        $product->update($this->getProcessedData($request, $product->image, 'update'));
 
         return redirect()->route('products.index');
     }
@@ -110,5 +70,31 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index');
+    }
+
+    public function getProcessedData($request, $productImage = Null, String $action = 'store'){
+        $image = $request->image;
+        $imagePath = $action === 'store' ? $this->defaultProductImage : $productImage;
+        $productName = $request->name;
+
+        if($image){
+            if($action === 'update' && ($imagePath != $this->defaultProductImage
+                                            && File::exists($imagePath) ))
+            {
+                File::delete($imagePath);
+            }
+
+            $imageName = str_replace(' ', '', $productName).'_'.Carbon::now()->format('d-m-Y');
+            $extension = '.'.$image->extension();
+            $imagePath = 'storage/'.$image->storeAs('products', $imageName.$extension, 'public');
+        }
+
+        return [
+            'name' => $productName,
+            'image' => $imagePath,
+            'price' => $request->price,
+            'description' => $request->description,
+            'category_id' => $request->category
+        ];
     }
 }
