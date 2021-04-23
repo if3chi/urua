@@ -10,8 +10,7 @@ use File;
 
 class ProductController extends Controller
 {
-
-    public $defaultProductImage = 'images/generic.png';
+    private $DEFAULT_IMAGE = 'images/generic.png';
 
     public function index()
     {
@@ -29,7 +28,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
 
-        Product::create($this->getProcessedData($request, 'store'));
+        Product::create(
+            $this->getProcessedData($request, $this->DEFAULT_IMAGE)
+        );
 
         return redirect()->route('products.index');
     }
@@ -48,7 +49,9 @@ class ProductController extends Controller
 
     public function update(StoreProductRequest $request, Product $product)
     {
-        $product->update($this->getProcessedData($request, $product->image, 'update'));
+        $product->update(
+            $this->getProcessedData($request, $product->image)
+        );
 
         return redirect()->route('products.index');
     }
@@ -61,40 +64,40 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $productImage = $product->image;
 
-        if($productImage != $this->defaultProductImage && File::exists($productImage)){
-            File::delete($productImage);
-        }
+        $this->deleteProductImage($product->image);
 
         $product->delete();
 
         return redirect()->route('products.index');
     }
 
-    public function getProcessedData($request, $productImage = Null, String $action = 'store'){
+    public function getProcessedData($request, $productImage){
         $image = $request->image;
-        $imagePath = $action === 'store' ? $this->defaultProductImage : $productImage;
         $productName = $request->name;
 
         if($image){
-            if($action === 'update' && ($imagePath != $this->defaultProductImage
-                                            && File::exists($imagePath) ))
-            {
-                File::delete($imagePath);
-            }
 
-            $imageName = str_replace(' ', '', $productName).'_'.Carbon::now()->format('d-m-Y');
+            $this->deleteProductImage($productImage);
+
+            $imageName = str_replace(' ', '', $productName).'-img_'.Carbon::now()->format('d-m-Y');
             $extension = '.'.$image->extension();
-            $imagePath = 'storage/'.$image->storeAs('products', $imageName.$extension, 'public');
+            $productImage = 'storage/'.$image->storeAs('products', $imageName.$extension, 'public');
         }
 
         return [
             'name' => $productName,
-            'image' => $imagePath,
+            'image' => $productImage,
             'price' => $request->price,
             'description' => $request->description,
             'category_id' => $request->category
         ];
+    }
+
+    public function deleteProductImage(string $productImage){
+        if($productImage != $this->DEFAULT_IMAGE && File::exists($productImage))
+            {
+                File::delete($productImage);
+            }
     }
 }
