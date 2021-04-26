@@ -5,7 +5,7 @@
 <div class="col-lg-12">
     <h1 class="my-3">Create Categories</h1>
     @error('name')
-        <div class="alert alert-danger">{{ $message }}</div>
+    <div class="alert alert-danger">{{ $message }}</div>
     @enderror
     <div class="row">
         <form action="{{ route('categories.store') }}" method="POST" class="form">
