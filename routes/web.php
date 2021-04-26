@@ -27,9 +27,9 @@ Route::get('contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::resource('categories', 'CategoryController');
-Route::resource('products', 'ProductController');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('categories', 'CategoryController');
+    Route::resource('products', 'ProductController');
+});
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
