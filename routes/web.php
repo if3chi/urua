@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
 
 Route::get('about', function () {
     return view('about');
@@ -28,8 +28,8 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('categories', 'CategoryController');
-    Route::resource('products', 'ProductController');
+    Route::resource('categories', 'App\Http\Controllers\CategoryController');
+    Route::resource('products', 'App\Http\Controllers\ProductController');
 });
 
 Auth::routes();
