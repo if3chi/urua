@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('about', function () {
     return view('about');
@@ -28,8 +32,8 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('categories', 'App\Http\Controllers\CategoryController');
-    Route::resource('products', 'App\Http\Controllers\ProductController');
+    Route::resource('categories', [CategoryController::class]);
+    Route::resource('products', [ProductController::class]);
 });
 
 Auth::routes();
