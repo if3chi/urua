@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Product;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    //
     public function index()
     {
         $categories = Category::latest()->take(5)->get();

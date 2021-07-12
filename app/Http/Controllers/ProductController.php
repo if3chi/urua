@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Http\Requests\StoreProductRequest;
-use App\Product;
 use Carbon\Carbon;
-use File;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\StoreProductRequest;
 
 class ProductController extends Controller
 {
