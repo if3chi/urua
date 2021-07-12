@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -32,8 +31,8 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('categories', [CategoryController::class]);
-    Route::resource('products', [ProductController::class]);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
 });
 
-Auth::routes();
+require __DIR__.'/auth.php';
